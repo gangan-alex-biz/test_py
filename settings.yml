@@ -1,8 +1,15 @@
+# url should ref to a downloadable csv file
 url: "https://www.stats.govt.nz/assets/Uploads/Annual-enterprise-survey/Annual-enterprise-survey-2020-financial-year-provisional/Download-data/annual-enterprise-survey-2020-financial-year-provisional-size-bands-csv.csv"
+# cache folder is required
 cache_folder: initial_files
-cache: False
+cache: True
 
+# available formats: json, csv
 output_format: json
+# outpur destination folder is required
 output_destination: output_files
 rows: 10
 cols: 5
+
+# logs folder is required
+logs_folder: logs
