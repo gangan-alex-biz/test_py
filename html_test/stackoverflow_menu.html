@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="styles.css">
+  <title>StackOverflow Menu</title>
+</head>
+<body>
+
+<div id="left-sidebar" data-is-here-when="md lg" class="left-sidebar js-pinned-left-sidebar ps-relative">
+  <div class="left-sidebar--sticky-container js-sticky-leftnav">
+    <nav role="navigation">
+      <ol class="nav-links">
+        <li class="">
+          <a href="/" class="pl8 js-gps-track nav-links--link"
+             data-gps-track="top_nav.click({is_current:false, location:24, destination:8})" aria-controls=""
+             data-controller="" data-s-popover-placement="right" data-s-popover-auto-show="true"
+             data-s-popover-hide-on-outside-click="never">
+            <div class="d-flex ai-center">
+              <div class="flex--item truncate">
+                Home
+              </div>
+            </div>
+          </a>
+        </li>
+        <li>
+          <ol class="nav-links">
+            <li class="fs-fine tt-uppercase ml8mb4mt16 fc-light">Public</li>
+            <li class="">
+              <a id="nav-questions" href="/questions" class="pl8 js-gps-track nav-links--link -link__with-icon"
+                 data-gps-track="top_nav.click({is_current:false, location:25, destination:1})" aria-controls=""
+                 data-controller="" data-s-popover-placement="right" data-s-popover-auto-show="true"
+                 data-s-popover-hide-on-outside-click="never">
+                <svg aria-hidden="true" class="svg-icon iconGlobe" width="18" height="18" viewBox="0 0 18 18">
+                  <path d="M9 1C4.64 1 1 4.64 1 9c0 4.36 3.64 8 8 8 4.36 0 8-3.64 8-8 0-4.36-3.64-8-8-8ZM8 15.32a6.46 6.46 0 01-4.3-2.74 6.46 6.46 0 01-.93-5.01L7 11.68v.8c0 .88.12 1.32 1 1.32v1.52Zm5.72-2c-.2-.66-1-1.32-1.72-1.32h-1v-2c0-.44-.56-1-1-1H6V7h1c.44 0 1-.56 1-1V5h2c.88 0 1.4-.72 1.4-1.6v-.33a6.45 6.45 0 013.83 4.51 6.45 6.45 0 01-1.51 5.73v.01Z"></path>
+                </svg>
+                <span class="-link--channel-name">Questions</span>
+              </a>
+            </li>
+
+            <li class="">
+              <a id="nav-tags" href="/tags" class=" js-gps-track nav-links--link"
+                 data-gps-track="top_nav.click({is_current:false, location:25, destination:2})" aria-controls=""
+                 data-controller="" data-s-popover-placement="right" data-s-popover-auto-show="true"
+                 data-s-popover-hide-on-outside-click="never">
+                <div class="d-flex ai-center">
+                  <div class="flex--item truncate">
+                    Tags
+                  </div>
+                </div>
+              </a>
+            </li>
+            <li class=" youarehere">
+              <a id="nav-users" href="/users" class=" js-gps-track nav-links--link"
+                 data-gps-track="top_nav.click({is_current:true, location:25, destination:3})" aria-controls=""
+                 data-controller="" data-s-popover-placement="right" data-s-popover-auto-show="true"
+                 data-s-popover-hide-on-outside-click="never">
+                <div class="d-flex ai-center">
+                  <div class="flex--item truncate">
+                    Users
+                  </div>
+                </div>
+              </a>
+            </li>
+            <li class="d-flex ml8mb4mt16 jc-space-between">
+              <div class="flex--item tt-uppercase tt-uppercase fs-fine fc-light">Collectives</div>
+              <div class="flex--item fs-fine fc-light">
+                <a href="javascript:void(0)" class="s-link s-link__inherit mr8 js-gps-track" role="button"
+                   aria-controls="popover-discover-collectives" data-controller="s-popover"
+                   data-action="s-popover#toggle"
+                   data-s-popover-placement="top" data-s-popover-toggle-class="is-selected"
+                   data-gps-track="top_nav.click({is_current:false, location:25, destination:17})">
+                  <svg aria-hidden="true" class="svg-icon iconInfoSm" width="14" height="14" viewBox="0 0 14 14">
+                    <path d="M7 1a6 6 0 110 12A6 6 0 017 1Zm1 10V6H6v5h2Zm0-6V3H6v2h2Z"></path>
+                  </svg>
+                </a>
+              </div>
+            </li>
+            <li class="">
+              <a id="nav-collective-discover" href="/collectives"
+                 class="pl8 ai-center js-gps-track nav-links--link -link__with-icon"
+                 data-gps-track="top_nav.click({is_current:false, location:25, destination:18})" aria-controls=""
+                 data-controller="" data-s-popover-placement="right" data-s-popover-auto-show="true"
+                 data-s-popover-hide-on-outside-click="never">
+                <svg aria-hidden="true" class="mt-auto svg-icon iconStarVerified" width="18" height="18"
+                     viewBox="0 0 18 18">
+                  <path d="M9.86.89a1.14 1.14 0 00-1.72 0l-.5.58c-.3.35-.79.48-1.23.33l-.72-.25a1.14 1.14 0 00-1.49.85l-.14.76c-.1.45-.45.8-.9.9l-.76.14c-.67.14-1.08.83-.85 1.49l.25.72c.15.44.02.92-.33 1.23l-.58.5a1.14 1.14 0 000 1.72l.58.5c.35.3.48.79.33 1.23l-.25.72c-.23.66.18 1.35.85 1.49l.76.14c.45.1.8.45.9.9l.14.76c.14.67.83 1.08 1.49.85l.72-.25c.44-.15.92-.02 1.23.33l.5.58c.46.52 1.26.52 1.72 0l.5-.58c.3-.35.79-.48 1.23-.33l.72.25c.66.23 1.35-.18 1.49-.85l.14-.76c.1-.45.45-.8.9-.9l.76-.14c.67-.14 1.08-.83.85-1.49l-.25-.72c-.15-.44-.02-.92.33-1.23l.58-.5c.52-.46.52-1.26 0-1.72l-.58-.5c-.35-.3-.48-.79-.33-1.23l.25-.72a1.14 1.14 0 00-.85-1.49l-.76-.14c-.45-.1-.8-.45-.9-.9l-.14-.76a1.14 1.14 0 00-1.49-.85l-.72.25c-.44.15-.92.02-1.23-.33l-.5-.58Zm-.49 2.67L10.6 6.6c.05.15.19.24.34.25l3.26.22c.36.03.5.48.23.71l-2.5 2.1a.4.4 0 00-.14.4l.8 3.16a.4.4 0 01-.6.44L9.2 12.13a.4.4 0 00-.42 0l-2.77 1.74a.4.4 0 01-.6-.44l.8-3.16a.4.4 0 00-.13-.4l-2.5-2.1a.4.4 0 01.22-.7l3.26-.23a.4.4 0 00.34-.25l1.22-3.03a.4.4 0 01.74 0Z"></path>
+                </svg>
+                <span class="-link--channel-name">Explore Collectives</span>
+              </a>
+            </li>
+          </ol>
+        </ol>
+    </nav>
+  </div>
+</div>
+</body>
+</html>
+
