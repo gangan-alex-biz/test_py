@@ -1,5 +1,5 @@
 """
-Reading CSV file, writing its first 5 columns and 10 rows to a news csv or json file.
+Reading CSV file, writing its first N columns and M rows to a new csv or json file.
 All the config is placed into settings.yml file.
 """
 import logging
@@ -11,45 +11,60 @@ import requests
 import yaml
 
 
+def log_info(func):
+    """Logs function's docstring and arguments each time it is called"""
+    def wrapped(*args, ** kwargs):
+        res = None
+        try:
+            logging.info(func.__doc__)
+            res = func(*args, ** kwargs)
+        except:
+            logging.error("Exception occurred", exc_info=True)
+        return res
+    return wrapped
+
+
 class FileGetter:
     def __init__(self, url, cache_folder, cache):
         self.url: str = url
         self.cache_folder: str = cache_folder
         self.cache: bool = cache
 
+    @log_info
     def get_file(self) -> None:
+        """Defining whether new or fresh file should be downloaded"""
         if not self.cache:
             logging.warning("Caching source file is disabled in the settings")
-        if not self.is_file_cached or not self.cache:
-            try:
-                req = requests.get(self.url)
-                with open(self.file_name, "wb") as file:
-                    file.write(req.content)
-                logging.info("Downloaded fresh copy of the source file")
-            except:
-                logging.error("Exception occurred", exc_info=True)
-        else:
-            logging.info("Using previously downloaded file")
+        if not self.cache or not self.is_file_cached:
+            self.download_and_save_file()
+
+    @log_info
+    def download_and_save_file(self):
+        """Downloading a file"""
+        req = requests.get(self.url)
+        with open(self.file_name, "wb") as file:
+            file.write(req.content)
+
+    @property
+    @log_info
+    def is_file_cached(self) -> bool:
+        """Looking for existing file"""
+        return os.path.exists(self.file_name)
 
     @property
     def file_name(self) -> str:
         return f"{self.cache_folder}/{self.url.split('/')[-1].split('?')[0]}"
 
-    @property
-    def is_file_cached(self) -> bool:
-        return os.path.exists(self.file_name)
 
 
 class FileTransformer:
     def __init__(self, file_name):
         self.file_name: str = file_name
 
+    @log_info
     def read_first_cols_rows(self, cols: int, rows: int) -> pd.DataFrame:
-        try:
-            df = pd.read_csv(self.file_name)
-        except:
-            logging.error("Exception occurred", exc_info=True)
-        logging.info(f"Extracted {cols} columns and {rows} rows")
+        """Extracting first rows and columns of a table according to args provided"""
+        df = pd.read_csv(self.file_name)
         return df.iloc[:rows, :cols]
 
 
@@ -63,30 +78,36 @@ class FileSaver:
             "csv": self.save_as_csv,
         }
 
+    @log_info
     def save_as_csv(self) -> None:
-        self.source_df.to_csv(f"{self.dest}.csv")
+        """Saving the file in csv format"""
+        self.dest += ".csv"
+        self.source_df.to_csv(self.dest)
 
+    @log_info
     def save_as_json(self) -> None:
-        self.source_df.to_json(f"{self.dest}.json", orient="records")
+        """Saving the file in json format"""
+        self.dest += ".json"
+        self.source_df.to_json(self.dest, orient="records")
 
     def save(self) -> None:
+        """Defines and runs saver function"""
         saver = self.formats.get(self.output_format, None)
         if saver:
-            try:
-                saver()
-            except:
-                logging.info(f"Saved to {self.dest}.{self.output_format} file")
+            saver()
+            logging.info(f"File path: {self.dest}")
         else:
             logging.exception("Exception occurred: Unknown output format")
 
-
 def read_settings() -> dict:
+    """Reading setting from yml file"""
     with open("settings.yml") as f:
         settings = yaml.safe_load(f)
     return settings
 
 
 def prepare_folder(folder: str) -> None:
+    """Creating a folder if it does not exist"""
     if folder and not os.path.exists(folder):
         os.makedirs(folder)
 
@@ -94,6 +115,7 @@ def prepare_folder(folder: str) -> None:
 if __name__ == "__main__":
 
     settings = read_settings()
+
     for folder in ["cache_folder", "output_destination", "logs_folder"]:
         prepare_folder(settings[folder])
 
@@ -103,9 +125,17 @@ if __name__ == "__main__":
         format="%(asctime)s - %(message)s",
     )
 
-    logging.info("Script started")
+    logging.info("Settings used:")
+    for k, v in settings.items():
+        logging.info(f"{k}:{v}")
 
-    getter = FileGetter(settings["url"], settings["cache_folder"], settings["cache"])
+    logging.info("--Script started--")
+
+    getter = FileGetter(
+        settings["url"],
+        settings["cache_folder"],
+        settings["cache"],
+    )
     getter.get_file()
 
     transformer = FileTransformer(getter.file_name)
@@ -115,6 +145,10 @@ if __name__ == "__main__":
     )
 
     saver = FileSaver(
-        df, settings["output_destination"], getter.file_name, settings["output_format"]
+        df, settings["output_destination"],
+        getter.file_name.split("/")[1],
+        settings["output_format"],
     )
     saver.save()
+
+    logging.info("--Script ended --")
