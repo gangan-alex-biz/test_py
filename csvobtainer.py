@@ -2,6 +2,7 @@
 Reading CSV file, writing its first N columns and M rows to a new csv or json file.
 All the config is placed into settings.yml file.
 """
+import functools
 import logging
 import os
 from typing import Dict
@@ -13,10 +14,11 @@ import yaml
 
 def log_info(func):
     """Logs function's docstring and arguments each time it is called"""
+    @functools.wraps(func)
     def wrapped(*args, ** kwargs):
         res = None
         try:
-            logging.info(func.__doc__)
+            logging.info(func.__doc__.split("\n")[0])
             res = func(*args, ** kwargs)
         except:
             logging.error("Exception occurred", exc_info=True)
@@ -53,8 +55,10 @@ class FileGetter:
 
     @property
     def file_name(self) -> str:
-        return f"{self.cache_folder}/{self.url.split('/')[-1].split('?')[0]}"
-
+        return os.path.join(
+            self.cache_folder,
+            self.url.split('/')[-1].split('?')[0]
+        )
 
 
 class FileTransformer:
@@ -71,7 +75,10 @@ class FileTransformer:
 class FileSaver:
     def __init__(self, source_df, output_folder, output_file_name, output_format):
         self.source_df: pd.DataFrame = source_df
-        self.dest: str = f"{output_folder}/{output_file_name[:-4]}_modified"
+        self.dest: str = os.path.join(
+            output_folder,
+            f"{output_file_name[:-4]}_modified.{output_format}"
+        )
         self.output_format: str = output_format
         self.formats: Dict[str] = {
             "json": self.save_as_json,
@@ -81,13 +88,11 @@ class FileSaver:
     @log_info
     def save_as_csv(self) -> None:
         """Saving the file in csv format"""
-        self.dest += ".csv"
         self.source_df.to_csv(self.dest)
 
     @log_info
     def save_as_json(self) -> None:
         """Saving the file in json format"""
-        self.dest += ".json"
         self.source_df.to_json(self.dest, orient="records")
 
     def save(self) -> None:
@@ -98,6 +103,7 @@ class FileSaver:
             logging.info(f"File path: {self.dest}")
         else:
             logging.exception("Exception occurred: Unknown output format")
+
 
 def read_settings() -> dict:
     """Reading setting from yml file"""
@@ -112,7 +118,7 @@ def prepare_folder(folder: str) -> None:
         os.makedirs(folder)
 
 
-if __name__ == "__main__":
+def main():
 
     settings = read_settings()
 
@@ -120,7 +126,7 @@ if __name__ == "__main__":
         prepare_folder(settings[folder])
 
     logging.basicConfig(
-        filename=f"{settings['logs_folder']}/log.txt",
+        filename=os.path.join(settings['logs_folder'], "log.txt"),
         level=logging.INFO,
         format="%(asctime)s - %(message)s",
     )
@@ -152,3 +158,7 @@ if __name__ == "__main__":
     saver.save()
 
     logging.info("--Script ended --")
+
+
+if __name__ == "__main__":
+    main()
